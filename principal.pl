@@ -34,6 +34,9 @@ match(Topo,Carta,S) :-
    S is 0
   ).
 
+
+
+
 :- initialization(main).
 
 main:-
@@ -51,7 +54,9 @@ executarOpcao(Input):-
   (Input == 1 -> prepararJogo();
    Input == 2 -> exibir_regras(),
    read(Voltar),
-   menu()
+   (Voltar \== "" -> menu()
+   );
+   Input == 3 -> write("ATÉ BREVE!!"),nl
   ).
 
 prepararJogo():-
@@ -60,9 +65,15 @@ prepararJogo():-
   Deck1 = [[3,"amarela",""],[3,"azul",""],[20,"verde","+2"]],
   Deck2 = [[3,"verde",""],[4,"amarela",""]],
   Deck3 = [[0,"amarela",""],[3,"azul",""]],
-  rodar(PilhaShuffled,Deck1,Deck2,Deck3,[6,"azul","+2"],1,0).
+  novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"azul","+2"],1,0).
+
+novoJogo(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
+        write("\nIniciando o jogo: Você vs Lula vs Dilma... "),
+        write("lets do this!!\n"),
+        rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed).
 
 rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
+  write("--------------------------------------------------------------\n"),
   size(Deck1,Size1),size(Deck2,Size2),size(Deck3,Size3),
     (Size1 == 0 -> write("VOCÊ VENCEU, PARABÉNS"),nl;
    Size2 == 0 -> write("LULA FOI SOLTO, VOCÊ PERDEU!!"),nl;
@@ -129,6 +140,7 @@ gerenciaBot2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
     rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed)
 ).
 
+% Imprime a tela inicial do jogo
 tela_principal():-
   write("\n                      UUUUUUUU     UUUUUUUUNNNNNNNN        NNNNNNNN     OOOOOOOOO
                       U::::::U     U::::::UN:::::::N       N::::::N   OO:::::::::OO
@@ -164,6 +176,7 @@ tela_principal():-
 "
   ).
 
+% Exibe as regras do jogo
 exibir_regras():-
   write("\n*--------------------------------------------------------------------------------------*
 |                          REGRAS DO JOGO!
@@ -175,9 +188,9 @@ exibir_regras():-
 | 5) O jogo acaba quando não houver mais cartas no deck ou quando algum jogador zerar
 | o número de cartas na mão;
 | 6) Se não houver mais cartas no deck, ganha o jogador que tiver menos cartas!
-| 7) As cartas válidas para serem jogadas estarão indicadas por ">"
 |
-|     		  ---  Aperte qualquer tecla para voltar ---
+|
+|     		  ---  Aperte qualquer letra seguida de '.' para voltar ---
 |
 "
   ).
