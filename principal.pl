@@ -31,6 +31,15 @@ concatenar([Elem|Lista1],Lista2,[Elem|Lista3]):-
   concatenar(Lista1,Lista2,Lista3).
 
 
+showDeck([],_,_).
+showDeck(Deck,Indice,Id):-
+  encontraCarta(Indice,Deck,Carta),
+  removeind(Indice,Deck,DeckAtt),
+  encontraCarta(0,Carta,Numero), encontraCarta(1,Carta,Cor), encontraCarta(2,Carta,Efeito),
+  write(Id), write(" - "), write("Número: "), write(Numero), write(" Cor: "), write(Cor), write(" Efeito: "), write(Efeito),nl,
+  NewId is Id+1,
+  showDeck(DeckAtt,0,NewId).
+
 % Retorna o efeito de uma carta
 efeito(Carta,Saida):-
   encontraCarta(2,Carta,Effect),
@@ -114,7 +123,8 @@ rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
 
 gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Topo: "), write(Topo),nl,
-  write("Sua mão: "), write(Deck1),nl,
+  write("Sua mão: "),nl,
+  showDeck(Deck1,0,0),nl,
   podeJogar(Deck1,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
     write("Escolha sua carta: "),
