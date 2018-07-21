@@ -35,37 +35,68 @@ main:-
   Baralho = [[0,"AZUL",""],[1,"AZUL",""],[2,"AZUL",""],[3,"AZUL",""],[4,"AZUL",""],[5,"AZUL",""],[6,"AZUL",""],[7,"AZUL",""],[8,"AZUL",""],[9,"AZUL",""]],
   random_permutation(Baralho,PilhaShuffled),
   Deck1 = [[3,"amarela",""],[3,"azul",""],[20,"verde","+2"]],
-  rodar(Deck1,[[3,"verde",""],[4,"vermelha",""]],[[0,"amarela",""],[5,"azul",""]],[6,"azul","+2"],1,0).
+  Deck2 = [[3,"verde",""],[4,"vermelha",""]],
+  Deck3 = [[0,"amarela",""],[5,"azul",""]],
+  rodar(PilhaShuffled,Deck1,Deck2,Deck3,[6,"azul","+2"],1,0).
 
-rodar(Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
+rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   (Vez == 1 ->
-    write("Topo: "), write(Topo),nl,
-    write("Sua mão: "), write(Deck1),nl,
-    write("Escolha sua carta: "),
-    read(X),
-    encontraCarta(X,Deck1,R),
-    match(Topo,R,Saida),
-    (Saida == 1 ->
-      write("Ta no caminho certo"),nl,
-      removeind(X,Deck1,Ret),
-      rodar(Ret,[4,5,6],[7,8,9],R,Vez is Vez + 1,Reversed);
-      Saida == 0 ->
-      write("Tente outra carta"),nl,
-      rodar(Deck1,Deck2,Deck3,Topo,Vez,Reversed) );
+    gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed);
    Vez == 2 ->
-       write("Vez de Lula"),nl,
-       write("Topo: "), write(Topo),nl,
-       write("Sua mão: "), write(Deck1),nl,
-       write("Escolha sua carta: "),
-       read(X),
-       encontraCarta(X,Deck2,R),
-       match(Topo,R,Saida),
-       (Saida == 1 ->
-         write("Ta no caminho certo"),nl,
-         removeind(X,Deck2,Ret),
-         rodar(Deck1,Ret,[7,8,9],R,Vez is Vez - 1,Reversed);
-         Saida == 0 ->
-         write("Tente outra carta"),nl,
-         rodar(Deck1,Deck2,Deck3,Topo,Vez,Reversed)
-       )
-   ).
+     gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed);
+   Vez == 3 ->
+     gerenciaBot2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed)
+ ).
+
+gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
+  write("Topo: "), write(Topo),nl,
+  write("Sua mão: "), write(Deck1),nl,
+  write("Escolha sua carta: "),
+  read(X),
+  encontraCarta(X,Deck1,R),
+  match(Topo,R,Saida),
+  (Saida == 1 ->
+    write("Ta no caminho certo"),nl,
+    removeind(X,Deck1,Ret),
+    Prox is Vez+1,
+    rodar(Pilha,Ret,Deck2,Deck3,R,Prox,Reversed);
+    Saida == 0 ->
+    write("Tente outra carta"),nl,
+    rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed)
+  ).
+
+gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
+  write("Vez de Lula"),nl,
+  write("Topo: "), write(Topo),nl,
+  write("Sua mão: "), write(Deck2),nl,
+  write("Escolha sua carta: "),
+  read(X),
+  encontraCarta(X,Deck2,R),
+  match(Topo,R,Saida),
+  (Saida == 1 ->
+    write("Ta no caminho certo"),nl,
+    removeind(X,Deck2,Ret),
+    Prox is Vez+1,
+    rodar(Pilha,Deck1,Ret,Deck3,R,Prox,Reversed);
+    Saida == 0 ->
+    write("Tente outra carta"),nl,
+    rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed)
+).
+
+gerenciaBot2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
+  write("Vez de Dilmãe"),nl,
+  write("Topo: "), write(Topo),nl,
+  write("Sua mão: "), write(Deck3),nl,
+  write("Escolha sua carta: "),
+  read(X),
+  encontraCarta(X,Deck3,R),
+  match(Topo,R,Saida),
+  (Saida == 1 ->
+    write("Ta no caminho certo"),nl,
+    removeind(X,Deck3,Ret),
+    Prox is Vez-2,
+    rodar(Pilha,Deck1,Deck2,Ret,R,Prox,Reversed);
+    Saida == 0 ->
+    write("Tente outra carta"),nl,
+    rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed)
+).
