@@ -25,6 +25,15 @@ insereFim(N, [H|T], L):- insereFim(N,T,X), insereInicio(H, X, L).
 size([],0).
 size([_|T],S):-size(T,G),S is 1+G.
 
+efeito(Carta,Saida):-
+  encontraCarta(2,Carta,Effect),
+  (Effect == "+2" -> Saida is 2;
+   Effect == "+4" -> Saida is 4;
+   Effect == "BLOCK" -> Saida is 6;
+   Effect == "CORINGA" -> Saida is 8;
+   Saida is 10
+  ).
+
 % Verifica se a carta dá match com a do topo
 match(Topo,Carta,S) :-
   encontraCarta(1,Topo,ColorTopo), encontraCarta(1,Carta,ColorCarta),
@@ -68,7 +77,7 @@ executarOpcao(Input):-
 prepararJogo():-
   Baralho = [[0,"AZUL",""],[1,"AZUL",""],[2,"AZUL",""],[3,"AZUL",""],[4,"AZUL",""],[5,"AZUL",""],[6,"AZUL",""],[7,"AZUL",""],[8,"AZUL",""],[9,"AZUL",""]],
   random_permutation(Baralho,PilhaShuffled),
-  Deck1 = [[3,"amarela",""],[3,"azul",""],[20,"verde","+2"]],
+  Deck1 = [[3,"amarela",""],[3,"azul",""],[20,"verde","+2"],[30,"azul","BLOCK"]],
   Deck2 = [[3,"verde",""],[4,"amarela",""]],
   Deck3 = [[0,"amarela",""],[3,"azul",""]],
   novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"azul","+2"],1,0).
@@ -80,7 +89,7 @@ novoJogo(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
 
 rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("--------------------------------------------------------------\n"),
-  size(Deck1,Size1),size(Deck2,Size2),size(Deck3,Size3), size(Pilha,SizePilha),
+  size(Deck1,Size1), size(Deck2,Size2), size(Deck3,Size3), size(Pilha,SizePilha),
     (Size1 == 0 -> write("VOCÊ VENCEU, PARABÉNS"),nl;
    Size2 == 0 -> write("LULA FOI SOLTO, VOCÊ PERDEU!!"),nl;
    Size3 == 0 -> write("DILMÃE VOLTOU À PRESIDÊNCIA, VOCÊ PERDEU!!"),nl;
@@ -98,19 +107,27 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Topo: "), write(Topo),nl,
   write("Sua mão: "), write(Deck1),nl,
   podeJogar(Deck1,Topo,Retorno),
-  write(Retorno),
-  write("Escolha sua carta: "),
-  read(X),
-  encontraCarta(X,Deck1,R),
-  match(Topo,R,Saida),
-  (Saida == 1 ->
-    write("Ta no caminho certo"),nl,
-    removeind(X,Deck1,Ret),
-    Prox is Vez+1,
-    rodar(Pilha,Ret,Deck2,Deck3,R,Prox,Reversed);
-    Saida == 0 ->
-    write("Tente outra carta"),nl,
-    rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed)
+  (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
+    write("Escolha sua carta: "),
+    read(Input),
+    encontraCarta(Input,Deck1,Carta),
+    match(Topo,Carta,Saida),
+    (Saida == 1 -> % Se a carta der match then...
+      removeind(Input,Deck1,DeckAtt), efeito(Carta,Efeito),
+      (Reversed == 0 ->
+          (Efeito == 10 -> Prox is Vez+1;
+          Efeito == 6 -> Prox is Vez+2 );
+
+       (Efeito == 10 -> Prox is Vez+2;
+        Efeito == 6 -> Prox is Vez+1 )
+      ) ; % Se não der, pede pra tentar outra...
+      Prox is Vez,
+      write("Tente outra carta"),nl,
+      rodar(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
+    ),
+    rodar(Pilha,Deck1,Deck2,Deck3,Carta,Prox,Reversed)
+  ; % Se chegou aqui, o player não possui carta válida
+  write("Você não possui carta válida para esta rodada!!")
   ).
 
 gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
