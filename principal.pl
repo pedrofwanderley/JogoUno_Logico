@@ -37,6 +37,24 @@ match(Topo,Carta,S) :-
 :- initialization(main).
 
 main:-
+  menu().
+
+menu():-
+  tela_principal(),
+  read(Input),
+  ((Input =:= 1 ; Input == 2 ; Input == 3) -> executarOpcao(Input);
+    write("Opção Inválida, Tente outra vez!!"),nl,
+    menu()
+  ).
+
+executarOpcao(Input):-
+  (Input == 1 -> prepararJogo();
+   Input == 2 -> exibir_regras(),
+   read(Voltar),
+   menu()
+  ).
+
+prepararJogo():-
   Baralho = [[0,"AZUL",""],[1,"AZUL",""],[2,"AZUL",""],[3,"AZUL",""],[4,"AZUL",""],[5,"AZUL",""],[6,"AZUL",""],[7,"AZUL",""],[8,"AZUL",""],[9,"AZUL",""]],
   random_permutation(Baralho,PilhaShuffled),
   Deck1 = [[3,"amarela",""],[3,"azul",""],[20,"verde","+2"]],
@@ -110,3 +128,56 @@ gerenciaBot2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
     write("Tente outra carta"),nl,
     rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed)
 ).
+
+tela_principal():-
+  write("\n                      UUUUUUUU     UUUUUUUUNNNNNNNN        NNNNNNNN     OOOOOOOOO
+                      U::::::U     U::::::UN:::::::N       N::::::N   OO:::::::::OO
+                      U::::::U     U::::::UN::::::::N      N::::::N OO:::::::::::::OO
+                      UU:::::U     U:::::UUN:::::::::N     N::::::NO:::::::OOO:::::::O
+                       U:::::U     U:::::U N::::::::::N    N::::::NO::::::O   O::::::O
+                       U:::::D     D:::::U N:::::::::::N   N::::::NO:::::O     O:::::O
+                       U:::::D     D:::::U N:::::::N::::N  N::::::NO:::::O     O:::::O
+                       U:::::D     D:::::U N::::::N N::::N N::::::NO:::::O     O:::::O
+                       U:::::D     D:::::U N::::::N  N::::N:::::::NO:::::O     O:::::O
+                       U:::::D     D:::::U N::::::N   N:::::::::::NO:::::O     O:::::O
+                       U:::::D     D:::::U N::::::N    N::::::::::NO:::::O     O:::::O
+                       U::::::U   U::::::U N::::::N     N:::::::::NO::::::O   O::::::O
+                       U:::::::UUU:::::::U N::::::N      N::::::::NO:::::::OOO:::::::O
+                       UU:::::::::::::UU  N::::::N       N:::::::N OO:::::::::::::OO
+                         UU:::::::::UU    N::::::N        N::::::N   OO:::::::::OO
+                           UUUUUUUUU      NNNNNNNN         NNNNNNN     OOOOOOOOO
+
+
+  *---------------------------------------------*
+  |------ Seja bem-vindo(a) ao jogo UNO! -------|
+  |--------Derrote ex presidentes do BR---------|
+  |---------  e salve o Brasil  ----------------|
+  |---------------------------------------------|
+  |----------- Escolha uma opção: --------------|
+  |---------------------------------------------|
+  |---------------------------------------------|
+  |---------------------------------------------|
+  |----------- 1) START GAME -------------------|
+  |----------- 2) Exibir Regras ----------------|
+  |----------- 0) Quit Game --------------------|
+  *---------------------------------------------*
+"
+  ).
+
+exibir_regras():-
+  write("\n*--------------------------------------------------------------------------------------*
+|                          REGRAS DO JOGO!
+| 1) O jogo é 1x2, ou seja, um jogador contra 2 bots inteligentes;
+| 2) São distribuidas 7 cartas aleatórias para cada jogador;
+| 3) Cada jogador só pode jogar 1 carta por vez;
+| 4) Caso o jogador não tenha uma carta válida para a jogada, uma nova carta
+| será automaticamente puxada do deck e jogada, caso seja válida;
+| 5) O jogo acaba quando não houver mais cartas no deck ou quando algum jogador zerar
+| o número de cartas na mão;
+| 6) Se não houver mais cartas no deck, ganha o jogador que tiver menos cartas!
+| 7) As cartas válidas para serem jogadas estarão indicadas por ">"
+|
+|     		  ---  Aperte qualquer tecla para voltar ---
+|
+"
+  ).
