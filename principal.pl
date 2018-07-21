@@ -30,15 +30,19 @@ concatenar([],Lista1,Lista2).
 concatenar([Elem|Lista1],Lista2,[Elem|Lista3]):-
   concatenar(Lista1,Lista2,Lista3).
 
-
+% Mostra as cartas do deck
 showDeck([],_,_).
 showDeck(Deck,Indice,Id):-
   encontraCarta(Indice,Deck,Carta),
   removeind(Indice,Deck,DeckAtt),
-  encontraCarta(0,Carta,Numero), encontraCarta(1,Carta,Cor), encontraCarta(2,Carta,Efeito),
-  write(Id), write(" - "), write("Número: "), write(Numero), write(" Cor: "), write(Cor), write(" Efeito: "), write(Efeito),nl,
+  write(Id), write(" - "), showCard(Carta),
   NewId is Id+1,
   showDeck(DeckAtt,0,NewId).
+
+% Mostra uma carta simples
+showCard(Carta):-
+  encontraCarta(0,Carta,Numero), encontraCarta(1,Carta,Cor), encontraCarta(2,Carta,Efeito),
+  write("Número: "), write(Numero), write(" Cor: "), write(Cor), write(" Efeito: "), write(Efeito),nl.
 
 % Retorna o efeito de uma carta
 efeito(Carta,Saida):-
@@ -94,10 +98,10 @@ executarOpcao(Input):-
 prepararJogo():-
   Baralho = [[0,"AZUL",""],[1,"AZUL",""],[2,"AZUL",""],[3,"AZUL",""],[4,"AZUL",""],[5,"AZUL",""],[6,"AZUL",""],[7,"AZUL",""],[8,"AZUL",""],[9,"AZUL",""]],
   random_permutation(Baralho,PilhaShuffled),
-  Deck1 = [[3,"amarela",""],[3,"azul",""],[20,"verde","+2"],[30,"azul","BLOCK"],[40,"azul","REVERSE"]],
-  Deck2 = [[3,"verde",""],[4,"amarela",""]],
-  Deck3 = [[0,"amarela",""],[3,"azul",""]],
-  novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"azul",""],1,0).
+  Deck1 = [[3,"AMARELA",""],[3,"AZUL",""],[20,"VERDE","+2"],[30,"AZUL","BLOCK"],[40,"AZUL","REVERSE"]],
+  Deck2 = [[3,"VERDE",""],[4,"AMARELA",""]],
+  Deck3 = [[0,"AMARELA",""],[3,"AZUL",""]],
+  novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"AZUL",""],1,0).
 
 novoJogo(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
         write("\nIniciando o jogo: Você vs Lula vs Dilma... "),
@@ -122,12 +126,12 @@ rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
  ).
 
 gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
-  write("Topo: "), write(Topo),nl,
+  write("Topo: "), showCard(Topo),
   write("Sua mão: "),nl,
   showDeck(Deck1,0,0),nl,
   podeJogar(Deck1,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
-    write("Escolha sua carta: "),
+    write("Escolha sua carta "),
     read(Input),
     encontraCarta(Input,Deck1,Carta),
     match(Topo,Carta,Saida),
