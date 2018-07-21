@@ -21,6 +21,11 @@ insereInicio(H, L, [H|L]):- !.
 insereFim(T, [H], L):- insereInicio(H,[T],L), !.
 insereFim(N, [H|T], L):- insereFim(N,T,X), insereInicio(H, X, L).
 
+% Qtd de cartas no deck
+size([],0).
+size([_|T],S):-size(T,G),S is 1+G.
+
+% Verifica se a carta dá match com a do topo
 match(Topo,Carta,S) :-
   encontraCarta(1,Topo,ColorTopo), encontraCarta(1,Carta,ColorCarta),
   encontraCarta(0,Topo,NumTopo), encontraCarta(0,Carta,NumCarta),
@@ -35,11 +40,16 @@ main:-
   Baralho = [[0,"AZUL",""],[1,"AZUL",""],[2,"AZUL",""],[3,"AZUL",""],[4,"AZUL",""],[5,"AZUL",""],[6,"AZUL",""],[7,"AZUL",""],[8,"AZUL",""],[9,"AZUL",""]],
   random_permutation(Baralho,PilhaShuffled),
   Deck1 = [[3,"amarela",""],[3,"azul",""],[20,"verde","+2"]],
-  Deck2 = [[3,"verde",""],[4,"vermelha",""]],
-  Deck3 = [[0,"amarela",""],[5,"azul",""]],
+  Deck2 = [[3,"verde",""],[4,"amarela",""]],
+  Deck3 = [[0,"amarela",""],[3,"azul",""]],
   rodar(PilhaShuffled,Deck1,Deck2,Deck3,[6,"azul","+2"],1,0).
 
 rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
+  size(Deck1,Size1),size(Deck2,Size2),size(Deck3,Size3),
+    (Size1 == 0 -> write("VOCÊ VENCEU, PARABÉNS"),nl;
+   Size2 == 0 -> write("LULA FOI SOLTO, VOCÊ PERDEU!!"),nl;
+   Size3 == 0 -> write("DILMÃE VOLTOU À PRESIDÊNCIA, VOCÊ PERDEU!!"),nl
+  );
   (Vez == 1 ->
     gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed);
    Vez == 2 ->
