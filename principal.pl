@@ -34,7 +34,13 @@ match(Topo,Carta,S) :-
    S is 0
   ).
 
-
+% Verifica se o jogador tem carta que dá match com o topo
+podeJogar([],_,Retorno):- Retorno is 0.
+podeJogar([H|T],Carta,Retorno):-
+  match(Carta,H,S),
+  (S == 1 -> Retorno is S;
+   podeJogar(T,Carta,Retorno)
+  ).
 
 
 :- initialization(main).
@@ -74,10 +80,11 @@ novoJogo(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
 
 rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("--------------------------------------------------------------\n"),
-  size(Deck1,Size1),size(Deck2,Size2),size(Deck3,Size3),
+  size(Deck1,Size1),size(Deck2,Size2),size(Deck3,Size3), size(Pilha,SizePilha),
     (Size1 == 0 -> write("VOCÊ VENCEU, PARABÉNS"),nl;
    Size2 == 0 -> write("LULA FOI SOLTO, VOCÊ PERDEU!!"),nl;
-   Size3 == 0 -> write("DILMÃE VOLTOU À PRESIDÊNCIA, VOCÊ PERDEU!!"),nl
+   Size3 == 0 -> write("DILMÃE VOLTOU À PRESIDÊNCIA, VOCÊ PERDEU!!"),nl;
+   SizePilha == 0 -> write("O deck foi esgotado! O jogador com menos cartas venceu!")
   );
   (Vez == 1 ->
     gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed);
@@ -90,6 +97,8 @@ rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
 gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Topo: "), write(Topo),nl,
   write("Sua mão: "), write(Deck1),nl,
+  podeJogar(Deck1,Topo,Retorno),
+  write(Retorno),
   write("Escolha sua carta: "),
   read(X),
   encontraCarta(X,Deck1,R),
