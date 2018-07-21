@@ -1,4 +1,6 @@
 use_module(deck).
+use_module(util).
+use_module(carta).
 
 shuffle([],[]).
 shuffle(Deck,Bs) :-
@@ -7,14 +9,6 @@ shuffle(Deck,Bs) :-
 
 % PREDICADOS PARA MANIPULAR LISTAS
 
-% Encontra o elemento de uma lista a partir do índice
-encontraCarta(0, [H|_], H):- !.
-encontraCarta(I, [_|T], E):- X is I - 1, encontraCarta(X, T, E).
-
-% Remove um elemento da lista a partir do índice
-removeind(0,[_|T],T):- !.
-removeind(I,[H|T],R):- X is I - 1, removeind(X, T, Y), insereInicio(H, Y, R).
-
 % Insere um elemento no início de uma lista
 insereInicio(H, L, [H|L]):- !.
 
@@ -22,45 +16,11 @@ insereInicio(H, L, [H|L]):- !.
 insereFim(T, [H], L):- insereInicio(H,[T],L), !.
 insereFim(N, [H|T], L):- insereFim(N,T,X), insereInicio(H, X, L).
 
-% Qtd de cartas no deck
-size([],0).
-size([_|T],S):-size(T,G),S is 1+G.
 
 % Junta duas listas
 concatenar([],Lista1,Lista2).
 concatenar([Elem|Lista1],Lista2,[Elem|Lista3]):-
   concatenar(Lista1,Lista2,Lista3).
-
-
-
-% Retorna o efeito de uma carta
-efeito(Carta,Saida):-
-  encontraCarta(2,Carta,Effect),
-  (Effect == "REVERSE" -> Saida is 3;
-   Effect == "+2" -> Saida is 2;
-   Effect == "+4" -> Saida is 4;
-   Effect == "BLOCK" -> Saida is 6;
-   Effect == "CORINGA" -> Saida is 8;
-   Saida is 10
-  ).
-
-% Verifica se a carta dá match com a do topo
-match(Topo,Carta,S) :-
-  encontraCarta(1,Topo,ColorTopo), encontraCarta(1,Carta,ColorCarta),
-  encontraCarta(0,Topo,NumTopo), encontraCarta(0,Carta,NumCarta),
-  encontraCarta(2,Topo,EffTopo), encontraCarta(2,Carta,EffCarta),
-  ((ColorTopo == ColorCarta ; (NumCarta == NumTopo) ; ((EffTopo == EffCarta) , EffCarta \== "")) -> S is 1;
-   S is 0
-  ).
-
-% Verifica se o jogador tem carta que dá match com o topo
-podeJogar([],_,Retorno):- Retorno is 0.
-podeJogar([H|T],Carta,Retorno):-
-  match(Carta,H,S),
-  (S == 1 -> Retorno is S;
-   podeJogar(T,Carta,Retorno)
-  ).
-
 
 :- initialization(main).
 
@@ -182,58 +142,3 @@ gerenciaBot2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
     write("Tente outra carta"),nl,
     rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed)
 ).
-
-% Imprime a tela inicial do jogo
-tela_principal():-
-  write("\n                      UUUUUUUU     UUUUUUUUNNNNNNNN        NNNNNNNN     OOOOOOOOO
-                      U::::::U     U::::::UN:::::::N       N::::::N   OO:::::::::OO
-                      U::::::U     U::::::UN::::::::N      N::::::N OO:::::::::::::OO
-                      UU:::::U     U:::::UUN:::::::::N     N::::::NO:::::::OOO:::::::O
-                       U:::::U     U:::::U N::::::::::N    N::::::NO::::::O   O::::::O
-                       U:::::D     D:::::U N:::::::::::N   N::::::NO:::::O     O:::::O
-                       U:::::D     D:::::U N:::::::N::::N  N::::::NO:::::O     O:::::O
-                       U:::::D     D:::::U N::::::N N::::N N::::::NO:::::O     O:::::O
-                       U:::::D     D:::::U N::::::N  N::::N:::::::NO:::::O     O:::::O
-                       U:::::D     D:::::U N::::::N   N:::::::::::NO:::::O     O:::::O
-                       U:::::D     D:::::U N::::::N    N::::::::::NO:::::O     O:::::O
-                       U::::::U   U::::::U N::::::N     N:::::::::NO::::::O   O::::::O
-                       U:::::::UUU:::::::U N::::::N      N::::::::NO:::::::OOO:::::::O
-                       UU:::::::::::::UU  N::::::N       N:::::::N OO:::::::::::::OO
-                         UU:::::::::UU    N::::::N        N::::::N   OO:::::::::OO
-                           UUUUUUUUU      NNNNNNNN         NNNNNNN     OOOOOOOOO
-
-
-  *---------------------------------------------*
-  |------ Seja bem-vindo(a) ao jogo UNO! -------|
-  |--------Derrote ex presidentes do BR---------|
-  |---------  e salve o Brasil  ----------------|
-  |---------------------------------------------|
-  |----------- Escolha uma opção: --------------|
-  |---------------------------------------------|
-  |---------------------------------------------|
-  |---------------------------------------------|
-  |----------- 1) START GAME -------------------|
-  |----------- 2) Exibir Regras ----------------|
-  |----------- 0) Quit Game --------------------|
-  *---------------------------------------------*
-"
-  ).
-
-% Exibe as regras do jogo
-exibir_regras():-
-  write("\n*--------------------------------------------------------------------------------------*
-|                          REGRAS DO JOGO!
-| 1) O jogo é 1x2, ou seja, um jogador contra 2 bots inteligentes;
-| 2) São distribuidas 7 cartas aleatórias para cada jogador;
-| 3) Cada jogador só pode jogar 1 carta por vez;
-| 4) Caso o jogador não tenha uma carta válida para a jogada, uma nova carta
-| será automaticamente puxada do deck e jogada, caso seja válida;
-| 5) O jogo acaba quando não houver mais cartas no deck ou quando algum jogador zerar
-| o número de cartas na mão;
-| 6) Se não houver mais cartas no deck, ganha o jogador que tiver menos cartas!
-|
-|
-|     		  ---  Aperte qualquer letra seguida de '.' para voltar ---
-|
-"
-  ).
