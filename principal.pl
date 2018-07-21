@@ -25,6 +25,16 @@ insereFim(N, [H|T], L):- insereFim(N,T,X), insereInicio(H, X, L).
 size([],0).
 size([_|T],S):-size(T,G),S is 1+G.
 
+% Junta duas listas
+concatenar([],Lista1,Lista2).
+concatenar([Elem|Lista1],Lista2,[Elem|Lista3]):-
+  concatenar(Lista1,Lista2,Lista3).
+
+%Puxa cartas da pilha
+puxaCarta(Qtd,Deck,Retorno):-
+
+
+% Retorna o efeito de uma carta
 efeito(Carta,Saida):-
   encontraCarta(2,Carta,Effect),
   (Effect == "+2" -> Saida is 2;
