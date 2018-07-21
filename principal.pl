@@ -34,7 +34,8 @@ concatenar([Elem|Lista1],Lista2,[Elem|Lista3]):-
 % Retorna o efeito de uma carta
 efeito(Carta,Saida):-
   encontraCarta(2,Carta,Effect),
-  (Effect == "+2" -> Saida is 2;
+  (Effect == "REVERSE" -> Saida is 3;
+   Effect == "+2" -> Saida is 2;
    Effect == "+4" -> Saida is 4;
    Effect == "BLOCK" -> Saida is 6;
    Effect == "CORINGA" -> Saida is 8;
@@ -84,7 +85,7 @@ executarOpcao(Input):-
 prepararJogo():-
   Baralho = [[0,"AZUL",""],[1,"AZUL",""],[2,"AZUL",""],[3,"AZUL",""],[4,"AZUL",""],[5,"AZUL",""],[6,"AZUL",""],[7,"AZUL",""],[8,"AZUL",""],[9,"AZUL",""]],
   random_permutation(Baralho,PilhaShuffled),
-  Deck1 = [[3,"amarela",""],[3,"azul",""],[20,"verde","+2"],[30,"azul","BLOCK"]],
+  Deck1 = [[3,"amarela",""],[3,"azul",""],[20,"verde","+2"],[30,"azul","BLOCK"],[40,"azul","REVERSE"]],
   Deck2 = [[3,"verde",""],[4,"amarela",""]],
   Deck3 = [[0,"amarela",""],[3,"azul",""]],
   novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"azul",""],1,0).
@@ -123,12 +124,15 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
     (Saida == 1 -> % Se a carta der match then...
       removeind(Input,Deck1,DeckAtt), efeito(Carta,Efeito),
       (Reversed == 0 ->
-          (Efeito == 10 -> Prox is Vez+1,
-            rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
-          Efeito == 6 -> Prox is Vez+2 );
+          (Efeito == 10 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
+           Efeito == 6 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
+           Efeito == 3 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed)
+           );
 
-       (Efeito == 10 -> Prox is Vez+2;
-        Efeito == 6 -> Prox is Vez+1 )
+        (Efeito == 10 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
+         Efeito == 6 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
+         Efeito == 3 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed)
+         )
       ) ; % Se não der, pede pra tentar outra...
       Prox is Vez,
       write("Tente outra carta"),nl,
