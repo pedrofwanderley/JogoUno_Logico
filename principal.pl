@@ -30,9 +30,6 @@ concatenar([],Lista1,Lista2).
 concatenar([Elem|Lista1],Lista2,[Elem|Lista3]):-
   concatenar(Lista1,Lista2,Lista3).
 
-%Puxa cartas da pilha
-puxaCarta(Qtd,Deck,Retorno):-
-
 
 % Retorna o efeito de uma carta
 efeito(Carta,Saida):-
@@ -90,7 +87,7 @@ prepararJogo():-
   Deck1 = [[3,"amarela",""],[3,"azul",""],[20,"verde","+2"],[30,"azul","BLOCK"]],
   Deck2 = [[3,"verde",""],[4,"amarela",""]],
   Deck3 = [[0,"amarela",""],[3,"azul",""]],
-  novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"azul","+2"],1,0).
+  novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"azul",""],1,0).
 
 novoJogo(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
         write("\nIniciando o jogo: Você vs Lula vs Dilma... "),
@@ -104,7 +101,8 @@ rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
    Size2 == 0 -> write("LULA FOI SOLTO, VOCÊ PERDEU!!"),nl;
    Size3 == 0 -> write("DILMÃE VOLTOU À PRESIDÊNCIA, VOCÊ PERDEU!!"),nl;
    SizePilha == 0 -> write("O deck foi esgotado! O jogador com menos cartas venceu!")
-  );
+  ), menu()
+  ;
   (Vez == 1 ->
     gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed);
    Vez == 2 ->
@@ -125,7 +123,8 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
     (Saida == 1 -> % Se a carta der match then...
       removeind(Input,Deck1,DeckAtt), efeito(Carta,Efeito),
       (Reversed == 0 ->
-          (Efeito == 10 -> Prox is Vez+1;
+          (Efeito == 10 -> Prox is Vez+1,
+            rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
           Efeito == 6 -> Prox is Vez+2 );
 
        (Efeito == 10 -> Prox is Vez+2;
@@ -133,11 +132,12 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
       ) ; % Se não der, pede pra tentar outra...
       Prox is Vez,
       write("Tente outra carta"),nl,
-      rodar(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
+      gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
     ),
     rodar(Pilha,Deck1,Deck2,Deck3,Carta,Prox,Reversed)
   ; % Se chegou aqui, o player não possui carta válida
   write("Você não possui carta válida para esta rodada!!")
+
   ).
 
 gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
