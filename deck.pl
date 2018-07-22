@@ -1,4 +1,4 @@
-:- module(deck, [showCard/1,showDeck/3,encontraCarta/3,removeind/3,podeJogar/3,size/2]).
+:- module(deck, [showCard/1,showDeck/3,encontraCarta/3,removeind/3,podeJogar/3,size/2,insereFim/3,insereInicio/3]).
 
 % Mostra uma carta simples
 showCard(Carta):-
@@ -33,3 +33,10 @@ podeJogar([H|T],Carta,Retorno):-
 % Qtd de cartas no deck
 size([],0).
 size([_|T],S):-size(T,G),S is 1+G.
+
+% Insere um elemento no fim de uma lista
+insereFim(T, [H], L):- insereInicio(H,[T],L), !.
+insereFim(N, [H|T], L):- insereFim(N,T,X), insereInicio(H, X, L).
+
+% Insere um elemento no início de uma lista
+insereInicio(H, L, [H|L]):- !.

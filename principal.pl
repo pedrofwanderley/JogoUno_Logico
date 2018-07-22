@@ -2,26 +2,6 @@ use_module(deck).
 use_module(util).
 use_module(carta).
 
-shuffle([],[]).
-shuffle(Deck,Bs) :-
-   random_permutation(Deck,L),
-   Bs is L.
-
-% PREDICADOS PARA MANIPULAR LISTAS
-
-% Insere um elemento no início de uma lista
-insereInicio(H, L, [H|L]):- !.
-
-% Insere um elemento no fim de uma lista
-insereFim(T, [H], L):- insereInicio(H,[T],L), !.
-insereFim(N, [H|T], L):- insereFim(N,T,X), insereInicio(H, X, L).
-
-
-% Junta duas listas
-concatenar([],Lista1,Lista2).
-concatenar([Elem|Lista1],Lista2,[Elem|Lista3]):-
-  concatenar(Lista1,Lista2,Lista3).
-
 :- initialization(main).
 
 main:-
