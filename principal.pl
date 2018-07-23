@@ -1,6 +1,7 @@
 use_module(deck).
 use_module(util).
 use_module(carta).
+use_module(jogador).
 
 :- initialization(main).
 
@@ -55,12 +56,13 @@ rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
  ).
 
 gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
-  write("Sua Vez\n"), write("Topo: "), showCard(Topo),
-  write("Sua mão: "),nl,
-  showDeck(Deck1,0,0),nl,
+  write("Topo: "), showCard(Topo),
   podeJogar(Deck1,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
-    write("Escolha sua carta "),
+    write("\n  Sua vez - "), next(Reversed),
+    status(Deck2,Deck3),
+    showDeck(Deck1,0,0),nl,
+    write("Escolha uma carta "),
     read(Input),
     encontraCarta(Input,Deck1,Carta),
     match(Topo,Carta,Saida),
@@ -89,7 +91,6 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
 
 gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Vez de LULA\n"), write("Topo: "), showCard(Topo),
-  write("Sua mão: "),nl,
   showDeck(Deck2,0,0),nl,
   podeJogar(Deck2,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
