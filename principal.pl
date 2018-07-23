@@ -28,8 +28,8 @@ prepararJogo():-
   Baralho = [[0,"AZUL",""],[1,"AZUL",""],[2,"AZUL",""],[3,"AZUL",""],[4,"AZUL",""],[5,"AZUL",""],[6,"AZUL",""],[7,"AZUL",""],[8,"AZUL",""],[9,"AZUL",""]],
   random_permutation(Baralho,PilhaShuffled),
   Deck1 = [[3,"AMARELA",""],[3,"AZUL",""],[20,"VERDE","+2"],[30,"AZUL","BLOCK"],[40,"AZUL","REVERSE"]],
-  Deck2 = [[3,"VERDE",""],[4,"AMARELA",""]],
-  Deck3 = [[0,"AMARELA",""],[3,"AZUL",""]],
+  Deck2 = [[3,"AMARELA",""],[3,"AZUL",""],[20,"VERDE","+2"],[30,"AZUL","BLOCK"],[40,"AZUL","REVERSE"]],
+  Deck3 = [[3,"AMARELA",""],[3,"AZUL",""],[20,"VERDE","+2"],[30,"AZUL","BLOCK"],[40,"AZUL","REVERSE"]],
   novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"AZUL",""],1,0).
 
 novoJogo(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
@@ -55,7 +55,7 @@ rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
  ).
 
 gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
-  write("Topo: "), showCard(Topo),
+  write("Sua Vez\n"), write("Topo: "), showCard(Topo),
   write("Sua mão: "),nl,
   showDeck(Deck1,0,0),nl,
   podeJogar(Deck1,Topo,Retorno),
@@ -69,12 +69,12 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
       (Reversed == 0 ->
           (Efeito == 10 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
            Efeito == 6 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
-           Efeito == 3 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed)
+           Efeito == 3 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,1)
            );
 
         (Efeito == 10 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
          Efeito == 6 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
-         Efeito == 3 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed)
+         Efeito == 3 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,0)
          )
       ) ; % Se não der, pede pra tentar outra...
       Prox is Vez,
@@ -88,37 +88,67 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   ).
 
 gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
-  write("Vez de Lula"),nl,
-  write("Topo: "), write(Topo),nl,
-  write("Sua mão: "), write(Deck2),nl,
-  write("Escolha sua carta: "),
-  read(X),
-  encontraCarta(X,Deck2,R),
-  match(Topo,R,Saida),
-  (Saida == 1 ->
-    write("Ta no caminho certo"),nl,
-    removeind(X,Deck2,Ret),
-    Prox is Vez+1,
-    rodar(Pilha,Deck1,Ret,Deck3,R,Prox,Reversed);
-    Saida == 0 ->
-    write("Tente outra carta"),nl,
-    rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed)
-).
+  write("Vez de LULA\n"), write("Topo: "), showCard(Topo),
+  write("Sua mão: "),nl,
+  showDeck(Deck2,0,0),nl,
+  podeJogar(Deck2,Topo,Retorno),
+  (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
+    write("Escolha sua carta "),
+    read(Input),
+    encontraCarta(Input,Deck2,Carta),
+    match(Topo,Carta,Saida),
+    (Saida == 1 -> % Se a carta der match then...
+      removeind(Input,Deck2,DeckAtt), efeito(Carta,Efeito),
+      (Reversed == 0 ->
+          (Efeito == 10 -> Prox is Vez+1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,Reversed);
+           Efeito == 6 -> Prox is Vez-1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,Reversed);
+           Efeito == 3 -> Prox is Vez-1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,1)
+           );
+
+        (Efeito == 10 -> Prox is Vez-1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,Reversed);
+         Efeito == 6 -> Prox is Vez+1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,Reversed);
+         Efeito == 3 -> Prox is Vez+1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,0)
+         )
+      ) ; % Se não der, pede pra tentar outra...
+      Prox is Vez,
+      write("Tente outra carta"),nl,
+      gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
+    ),
+    rodar(Pilha,Deck1,Deck2,Deck3,Carta,Prox,Reversed)
+  ; % Se chegou aqui, o player não possui carta válida
+  write("Você não possui carta válida para esta rodada!!")
+
+  ).
 
 gerenciaBot2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
-  write("Vez de Dilmãe"),nl,
-  write("Topo: "), write(Topo),nl,
-  write("Sua mão: "), write(Deck3),nl,
-  write("Escolha sua carta: "),
-  read(X),
-  encontraCarta(X,Deck3,R),
-  match(Topo,R,Saida),
-  (Saida == 1 ->
-    write("Ta no caminho certo"),nl,
-    removeind(X,Deck3,Ret),
-    Prox is Vez-2,
-    rodar(Pilha,Deck1,Deck2,Ret,R,Prox,Reversed);
-    Saida == 0 ->
-    write("Tente outra carta"),nl,
-    rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed)
-).
+  write("Vez de DILMÃE\n"), write("Topo: "), showCard(Topo),
+  write("Sua mão: "),nl,
+  showDeck(Deck3,0,0),nl,
+  podeJogar(Deck3,Topo,Retorno),
+  (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
+    write("Escolha sua carta "),
+    read(Input),
+    encontraCarta(Input,Deck3,Carta),
+    match(Topo,Carta,Saida),
+    (Saida == 1 -> % Se a carta der match then...
+      removeind(Input,Deck3,DeckAtt), efeito(Carta,Efeito),
+      (Reversed == 0 ->
+          (Efeito == 10 -> Prox is Vez-2, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,Reversed);
+           Efeito == 6 -> Prox is Vez-1, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,Reversed);
+           Efeito == 3 -> Prox is Vez-1, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,1)
+           );
+
+        (Efeito == 10 -> Prox is Vez-1, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,Reversed);
+         Efeito == 6 -> Prox is Vez-2, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,Reversed);
+         Efeito == 3 -> Prox is Vez-2, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,0)
+         )
+      ) ; % Se não der, pede pra tentar outra...
+      Prox is Vez,
+      write("Tente outra carta"),nl,
+      gerenciaBot2(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
+    ),
+    rodar(Pilha,Deck1,Deck2,Deck3,Carta,Prox,Reversed)
+  ; % Se chegou aqui, o player não possui carta válida
+  write("Você não possui carta válida para esta rodada!!")
+
+  ).
