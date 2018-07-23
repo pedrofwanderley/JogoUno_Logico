@@ -34,7 +34,7 @@ prepararJogo():-
   novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"AZUL",""],1,0).
 
 novoJogo(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
-        write("\nIniciando o jogo: Você vs Lula vs Dilma... "),
+        write("\nIniciando o jogo: Você vs Lula vs Dilma... \n"),
         write("lets do this!!\n"),
         rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed).
 
@@ -59,9 +59,7 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Topo: "), showCard(Topo),
   podeJogar(Deck1,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
-    write("\n  Sua vez - "), next(Reversed),
-    status(Deck2,Deck3),
-    showDeck(Deck1,0,0),nl,
+    write("\n  Sua vez - "), next(Reversed), status(Deck2,Deck3), showDeck(Deck1,0,0),nl,
     write("Escolha uma carta "),
     read(Input),
     encontraCarta(Input,Deck1,Carta),
