@@ -28,7 +28,7 @@ executarOpcao(Input):-
 prepararJogo():-
   Baralho = [[0,"AZUL",""],[1,"AZUL",""],[2,"AZUL",""],[3,"AZUL",""],[4,"AZUL",""],[5,"AZUL",""],[6,"AZUL",""],[7,"AZUL",""],[8,"AZUL",""],[9,"AZUL",""]],
   random_permutation(Baralho,PilhaShuffled),
-  Deck1 = [[3,"AMARELA",""],[3,"AZUL",""],[20,"VERDE","+2"],[30,"AZUL","BLOCK"],[40,"AZUL","REVERSE"]],
+  makeHand(PilhaShuffled,Deck1),
   Deck2 = [[3,"AMARELA",""],[3,"AZUL",""],[20,"VERDE","+2"],[30,"AZUL","BLOCK"],[40,"AZUL","REVERSE"]],
   Deck3 = [[3,"AMARELA",""],[3,"AZUL",""],[20,"VERDE","+2"],[30,"AZUL","BLOCK"],[40,"AZUL","REVERSE"]],
   novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"AZUL",""],1,0).

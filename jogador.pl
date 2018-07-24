@@ -4,7 +4,7 @@ use_module(deck).
 
 % Mostra ao jogador o próximo bot a jogar
 next(Reversed):-
-  (reversed == 1 ->  write("Próximo a jogar: Dilmãe\n\n");
+  (Reversed == 1 ->  write("Próximo a jogar: Dilmãe\n\n");
     write("Próximo a jogar: Lula\n\n")
     ).
 
