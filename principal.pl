@@ -26,12 +26,29 @@ executarOpcao(Input):-
   ).
 
 prepararJogo():-
-  Baralho = [[0,"AZUL",""],[1,"AZUL",""],[2,"AZUL",""],[3,"AZUL",""],[4,"AZUL",""],[5,"AZUL",""],[6,"AZUL",""],[7,"AZUL",""],[8,"AZUL",""],[9,"AZUL",""]],
+  Pretas = [[30,"PRETA","+4"],[30,"PRETA","+4"],[30,"PRETA","+4"],[30,"PRETA","+4"],
+  [40,"PRETA","newColor"],[40,"PRETA","newColor"],[40,"PRETA","newColor"],[40,"PRETA","newColor"]],
+  Amarelas = [[0,"AMARELA"," "],[1,"AMARELA"," "],[2,"AMARELA"," "],[3,"AMARELA"," "],[4,"AMARELA"," "],
+  [5,"AMARELA"," "],[6,"AMARELA"," "],[7,"AMARELA"," "],[8,"AMARELA"," "],[9,"AMARELA"," "],[70,"AMARELA","BLOCK"],
+  [50,"AMARELA","REVERSE"],[60,"AMARELA","+2"],[70,"AMARELA","BLOCK"],[50,"AMARELA","REVERSE"],[60,"AMARELA","+2"]],
+  Verdes = [[0,"VERDE"," "],[1,"VERDE"," "],[2,"VERDE"," "],[3,"VERDE"," "],[4,"VERDE"," "],[5,"VERDE"," "],
+  [6,"VERDE"," "],[7,"VERDE"," "],[8,"VERDE"," "],[9,"VERDE"," "],[70,"VERDE","BLOCK"],[50,"VERDE","REVERSE"],
+  [60,"VERDE","+2"],[70,"VERDE","BLOCK"],[50,"VERDE","REVERSE"],[60,"VERDE","+2"]],
+  Azuis = [[0,"AZUL"," "],[1,"AZUL"," "],[2,"AZUL"," "],[3,"AZUL"," "],[4,"AZUL"," "],[5,"AZUL"," "],[6,"AZUL"," "],
+  [7,"AZUL"," "],[8,"AZUL",""],[9,"AZUL",""],[70,"AZUL","BLOCK"],[50,"AZUL","REVERSE"],[60,"AZUL","+2"],
+  [70,"AZUL","BLOCK"],[50,"AZUL","REVERSE"],[60,"AZUL","+2"]],
+  Vermelhas = [[0,"VERMELHA"," "],[1,"VERMELHA"," "],[2,"VERMELHA"," "],[3,"VERMELHA"," "],[4,"VERMELHA"," "],
+  [5,"VERMELHA"," "],[6,"VERMELHA"," "],[7,"VERMELHA"," "],[8,"VERMELHA"," "],[9,"VERMELHA"," "],
+  [70,"VERMELHA","BLOCK"],[50,"VERMELHA","REVERSE"],[60,"VERMELHA","+2"],[70,"VERMELHA","BLOCK"],
+  [50,"VERMELHA","REVERSE"],[60,"VERMELHA","+2"]],
+  conc(Pretas,Amarelas,Result1), conc(Result1,Verdes,Result2), conc(Result2,Azuis,Result3), conc(Result3,Vermelhas,Baralho),
   random_permutation(Baralho,PilhaShuffled),
-  getCards(PilhaShuffled,7,Deck1),
-  Deck2 = [[3,"AMARELA",""],[3,"AZUL",""],[20,"VERDE","+2"],[30,"AZUL","BLOCK"],[40,"AZUL","REVERSE"]],
-  Deck3 = [[3,"AMARELA",""],[3,"AZUL",""],[20,"VERDE","+2"],[30,"AZUL","BLOCK"],[40,"AZUL","REVERSE"]],
-  novoJogo(PilhaShuffled,Deck1,Deck2,Deck3,[6,"AZUL",""],1,0).
+  getCards(PilhaShuffled,7,Deck1), remCards(PilhaShuffled,7,Pilha1),
+  getCards(Pilha1,7,Deck2), remCards(Pilha1,7,Pilha2),
+  getCards(Pilha2,7,Deck3), remCards(Pilha2,7,Pilha3),
+  getCards(Pilha3,1,Topo), remCards(Pilha3,1,PilhaFinal),
+  encontraCarta(0,Topo,TopoFinal), write(TopoFinal),
+  novoJogo(PilhaFinal,Deck1,Deck2,Deck3,TopoFinal,1,0).
 
 novoJogo(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
         write("\nIniciando o jogo: Você vs Lula vs Dilma... \n"),

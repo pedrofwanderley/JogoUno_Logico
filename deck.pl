@@ -1,4 +1,4 @@
-:- module(deck, [showCard/1,showDeck/3,encontraCarta/3,removeind/3,podeJogar/3,size/2,insereFim/3,insereInicio/3,getCards/3]).
+:- module(deck, [showCard/1,showDeck/3,encontraCarta/3,removeind/3,podeJogar/3,size/2,insereFim/3,insereInicio/3,getCards/3,remCards/3,conc/3]).
 
 % Mostra uma carta simples
 showCard(Carta):-
@@ -48,3 +48,31 @@ getCards([A,B,C,D,E,F,G|_],Qtd,Retorno):-
     Qtd == 2 -> Retorno = [A,B];
     Qtd == 1 -> Retorno = [A]
   ).
+
+% Remove a quantidade especificada do baralho
+remCards([A,B,C,D,E,F,G|T],Qtd,Retorno):-
+  (Qtd == 7 -> Retorno = T;
+    Qtd == 4 -> conc([E,F,G],T,Lista), Retorno = Lista;
+    Qtd == 2 -> conc([C,D,E,F,G],T,Lista), Retorno = Lista;
+    Qtd == 1 -> conc([B,C,D,E,F,G],T,Lista), Retorno = Lista
+  ).
+
+% Concatena 2 listas
+conc([],L,L).
+conc([X|L1],L2,[X|L3]):-
+  conc(L1,L2,L3).
+
+      %  Pretas = [[30,"PRETA","+4"],[30,"PRETA","+4"],[30,"PRETA","+4"],[30,"PRETA","+4"],
+      %  [40,"PRETA","newColor"],[40,"PRETA","newColor"],[40,"PRETA","newColor"],[40,"PRETA","newColor"]],
+      %  Amarelas = [[0,"AMARELA"," "],[1,"AMARELA"," "],[2,"AMARELA"," "],[3,"AMARELA"," "],[4,"AMARELA"," "],
+      %  [5,"AMARELA"," "],[6,"AMARELA"," "],[7,"AMARELA"," "],[8,"AMARELA"," "],[9,"AMARELA"," "],[70,"AMARELA","BLOCK"],
+      %  [50,"AMARELA","REVERSE"],[60,"AMARELA","+2"],[70,"AMARELA","BLOCK"],[50,"AMARELA","REVERSE"],[60,"AMARELA","+2"]],
+      %  Verdes = [[0,"VERDE"," "],[1,"VERDE"," "],[2,"VERDE"," "],[3,"VERDE"," "],[4,"VERDE"," "],[5,"VERDE"," "],
+      %  [60,"VERDE","+2"],[70,"VERDE","BLOCK"],[50,"VERDE","REVERSE"],[60,"VERDE","+2"]],
+      %  Azuis = [[0,"AZUL"," "],[1,"AZUL"," "],[2,"AZUL"," "],[3,"AZUL"," "],[4,"AZUL"," "],[5,"AZUL"," "],[6,"AZUL"," "],
+      %  [7,"AZUL"," "],[8,"AZUL",""],[9,"AZUL",""],[70,"AZUL","BLOCK"],[50,"AZUL","REVERSE"],[60,"AZUL","+2"],
+      %  [70,"AZUL","BLOCK"],[50,"AZUL","REVERSE"],[60,"AZUL","+2"]],
+      %  Vermelhas = [[0,"VERMELHA"," "],[1,"VERMELHA"," "],[2,"VERMELHA"," "],[3,"VERMELHA"," "],[4,"VERMELHA"," "],
+      %  [5,"VERMELHA"," "],[6,"VERMELHA"," "],[7,"VERMELHA"," "],[8,"VERMELHA"," "],[9,"VERMELHA"," "],
+      %  [70,"VERMELHA","BLOCK"],[50,"VERMELHA","REVERSE"],[60,"VERMELHA","+2"],[70,"VERMELHA","BLOCK"],
+      %  [50,"VERMELHA","REVERSE"],[60,"VERMELHA","+2"]],
