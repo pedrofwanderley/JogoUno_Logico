@@ -7,7 +7,7 @@ match(Topo,Carta,S) :-
   encontraCarta(1,Topo,ColorTopo), encontraCarta(1,Carta,ColorCarta),
   encontraCarta(0,Topo,NumTopo), encontraCarta(0,Carta,NumCarta),
   encontraCarta(2,Topo,EffTopo), encontraCarta(2,Carta,EffCarta),
-  ((ColorTopo == ColorCarta ; (NumCarta == NumTopo) ; ((EffTopo == EffCarta) , EffCarta \== "")) -> S is 1;
+  ((ColorTopo == ColorCarta ; (NumCarta == NumTopo) ; ((EffTopo == EffCarta) , EffCarta \== " ")) -> S is 1;
    S is 0
   ).
 
