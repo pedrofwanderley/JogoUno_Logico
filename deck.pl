@@ -1,4 +1,4 @@
-:- module(deck, [showCard/1,showDeck/3,encontraCarta/3,removeind/3,podeJogar/3,size/2,insereFim/3,insereInicio/3,makeHand/2,getCards/3]).
+:- module(deck, [showCard/1,showDeck/3,encontraCarta/3,removeind/3,podeJogar/3,size/2,insereFim/3,insereInicio/3,getCards/3]).
 
 % Mostra uma carta simples
 showCard(Carta):-
@@ -41,9 +41,7 @@ insereFim(N, [H|T], L):- insereFim(N,T,X), insereInicio(H, X, L).
 % Insere um elemento no início de uma lista
 insereInicio(H, L, [H|L]):- !.
 
-% Retorna 7 cartas do baralho para a mão do jogador
-makeHand([A,B,C,D,E,F,G|_],Retorno):- Retorno = [A,B,C,D,E,F,G].
-
+% Retorna a quantidade especificada do baralho
 getCards([A,B,C,D,E,F,G|_],Qtd,Retorno):-
   (Qtd == 7 -> Retorno = [A,B,C,D,E,F,G];
     Qtd == 4 -> Retorno = [A,B,C,D];
