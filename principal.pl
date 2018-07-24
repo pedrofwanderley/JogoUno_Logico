@@ -6,12 +6,12 @@ use_module(jogador).
 :- initialization(main).
 
 main:-
+  tela_principal(),
   menu().
 
 menu():-
-  tela_principal(),
   read(Input),
-  ((Input =:= 1 ; Input == 2 ; Input == 3) -> executarOpcao(Input);
+  ((Input =:= 1 ; Input == 2 ; Input == 0) -> executarOpcao(Input);
     write("Opção Inválida, Tente outra vez!!"),nl,
     menu()
   ).
@@ -20,9 +20,9 @@ executarOpcao(Input):-
   (Input == 1 -> prepararJogo();
    Input == 2 -> exibir_regras(),
    read(Voltar),
-   (Voltar \== "" -> menu()
+   (Voltar \== "" -> main
    );
-   Input == 3 -> write("ATÉ BREVE!!"),nl
+   Input == 0 -> write("ATÉ BREVE!!"),nl
   ).
 
 prepararJogo():-
@@ -105,7 +105,7 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   ).
 
 gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
-  write("Vez de LULA\n"), write("Topo: "), showCard(Topo),
+  write("Vez de LULA\n\n"), write("Topo: "), showCard(Topo),nl,
   showDeck(Deck2,0,0),nl,
   podeJogar(Deck2,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
