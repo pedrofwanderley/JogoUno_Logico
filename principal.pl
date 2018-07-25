@@ -37,7 +37,7 @@ prepararJogo():-
   [70,"VERMELHA","BLOCK"],[50,"VERMELHA","REVERSE"],[60,"VERMELHA","+2"],[70,"VERMELHA","BLOCK"],[50,"VERMELHA","REVERSE"],[60,"VERMELHA","+2"]],
   conc(Pretas,Amarelas,Result1), conc(Result1,Verdes,Result2), conc(Result2,Azuis,Result3), conc(Result3,Vermelhas,Baralho),
   random_permutation(Baralho,PilhaShuffled),
-  getCards(PilhaShuffled,7,Deck1), remCards(PilhaShuffled,7,Pilha1),
+  getCards(PilhaShuffled,1,Deck1), remCards(PilhaShuffled,1,Pilha1),
   getCards(Pilha1,7,Deck2), remCards(Pilha1,7,Pilha2),
   getCards(Pilha2,7,Deck3), remCards(Pilha2,7,Pilha3),
   getCards(Pilha3,1,Topo), remCards(Pilha3,1,PilhaFinal),
@@ -101,27 +101,31 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Você não possui carta válida para esta rodada!!"), write("Aperte uma tecla para continuar"),
   read(X),
   getCards(Pilha, 1, CartaAdd), encontraCarta(0, CartaAdd, Carta), remCards(Pilha, 1, PilhaAtt), match(Topo,Carta,Valida),
-  (Valida == 1 ->       
+  (Valida == 1 ->
+    efeito(Carta, Efeito),       
     (Reversed == 0 ->
-          (Efeito == 10 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
-           Efeito == 6 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
-           Efeito == 3 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,1);
-           Efeito == 2 -> Prox is Vez+1, getCards(Pilha, 2, CartasAdd), remCards(Pilha, 2, PilhaAtt), conc(Deck2,CartasAdd,Deck2Att),
-           rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, Carta, Prox, Reversed)
+          (Efeito == 10 -> Prox is Vez+1, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,Reversed);
+           Efeito == 6 -> Prox is Vez+2, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,Reversed);
+           Efeito == 3 -> Prox is Vez+2, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,1);
+           Efeito == 2 -> Prox is Vez+1, getCards(PilhaAtt, 2, CartasAdd), remCards(PilhaAtt, 2, PilhaAtt2), conc(Deck2,CartasAdd,Deck2Att),
+           rodar(PilhaAtt2, Deck1, Deck2Att, Deck3, Carta, Prox, Reversed)
            );
 
-        (Efeito == 10 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
-         Efeito == 6 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
-         Efeito == 3 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,0);
-         Efeito == 2 -> Prox is Vez+2, getCards(Pilha, 2, CartasAdd), remCards(Pilha, 2, PilhaAtt), conc(Deck3,CartasAdd,Deck3Att),
-           rodar(PilhaAtt, DeckAtt, Deck2, Deck3Att, Carta, Prox, Reversed)
+        (Efeito == 10 -> Prox is Vez+2, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,Reversed);
+         Efeito == 6 -> Prox is Vez+1, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,Reversed);
+         Efeito == 3 -> Prox is Vez+1, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,0);
+         Efeito == 2 -> Prox is Vez+2, getCards(PilhaAtt, 2, CartasAdd), remCards(PilhaAtt, 2, PilhaAtt2), conc(Deck3,CartasAdd,Deck3Att),
+           rodar(PilhaAtt2, Deck1, Deck2, Deck3Att, Carta, Prox, Reversed)
          )
       );
-      conc(Deck1, CartaAdd, DeckAtt), rodar(Pilha, DeckAtt, Deck2, Deck3, Carta, Prox, Reversed)
+      Prox is Vez + 1,
+      conc(Deck1, CartaAdd, DeckAtt), rodar(PilhaAtt, DeckAtt, Deck2, Deck3, Topo, Prox, Reversed)
   )
   ).
 
 gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
+  size(Deck1, Sum),
+  writeln(Sum),
   write("Vez de LULA\n\n"), write("Topo: "), showCard(Topo),nl,
   showDeck(Deck2,0,0),nl,
   podeJogar(Deck2,Topo,Retorno),
