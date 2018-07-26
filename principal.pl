@@ -70,7 +70,7 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Topo: "), showCard(Topo),
   podeJogar(Deck1,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
-    write("\n  Sua vez - "), next(Reversed), status(Deck2,Deck3), showDeck(Deck1,0,0),nl,
+    write("\n  Sua vez - "), next(Reversed), status(Deck2,Deck3), showDeck(Deck1,0,0,Topo),nl,
     write("Escolha uma carta "),
     read(Input),
     encontraCarta(Input,Deck1,Carta),
@@ -114,7 +114,7 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   read(X),
   getCards(Pilha, 1, CartaAdd), encontraCarta(0, CartaAdd, Carta), remCards(Pilha, 1, PilhaAtt), match(Topo,Carta,Valida),
   (Valida == 1 ->
-    efeito(Carta, Efeito),       
+    efeito(Carta, Efeito),
     (Reversed == 0 ->
           (Efeito == 10 -> Prox is Vez+1, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,Reversed);
            Efeito == 6 -> Prox is Vez+2, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,Reversed);
@@ -144,7 +144,7 @@ gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   size(Deck1, Sum),
   writeln(Sum),
   write("Vez de LULA\n\n"), write("Topo: "), showCard(Topo),nl,
-  showDeck(Deck2,0,0),nl,
+  showDeck(Deck2,0,0,Topo),nl,
   podeJogar(Deck2,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
     write("Escolha sua carta "),
@@ -181,7 +181,7 @@ gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
 gerenciaBot2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Vez de DILMÃE\n"), write("Topo: "), showCard(Topo),
   write("Sua mão: "),nl,
-  showDeck(Deck3,0,0),nl,
+  showDeck(Deck3,0,0,Topo),nl,
   podeJogar(Deck3,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
     write("Escolha sua carta "),

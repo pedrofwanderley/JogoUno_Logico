@@ -1,4 +1,6 @@
-:- module(deck, [showCard/1,showDeck/3,encontraCarta/3,removeind/3,podeJogar/3,size/2,insereFim/3,insereInicio/3,getCards/3,remCards/3,conc/3]).
+:- module(deck, [showCard/1,showDeck/4,encontraCarta/3,removeind/3,podeJogar/3,size/2,insereFim/3,insereInicio/3,getCards/3,remCards/3,conc/3]).
+
+use_module(carta).
 
 % Mostra uma carta simples
 showCard(Carta):-
@@ -6,13 +8,16 @@ showCard(Carta):-
   write("Número: "), write(Numero), write(" Cor: "), write(Cor), write(" Efeito: "), write(Efeito),nl.
 
 % Mostra as cartas do deck
-showDeck([],_,_).
-showDeck(Deck,Indice,Id):-
+showDeck([],_,_,_).
+showDeck(Deck,Indice,Id,Topo):-
   encontraCarta(Indice,Deck,Carta),
   removeind(Indice,Deck,DeckAtt),
-  write(Id), write(" - "), showCard(Carta),
+  match(Topo,Carta,Retorno),
+  (Retorno == 1 -> write("> "), write(Id), write(" - "), showCard(Carta);
+     write("  "), write(Id), write(" - "), showCard(Carta)
+  ),
   NewId is Id+1,
-  showDeck(DeckAtt,0,NewId).
+  showDeck(DeckAtt,0,NewId,Topo).
 
 % Encontra o elemento de uma lista a partir do índice
 encontraCarta(0, [H|_], H):- !.
