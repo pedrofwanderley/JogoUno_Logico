@@ -98,10 +98,10 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
            rodar(PilhaAtt, DeckAtt, Deck2, Deck3Att, Carta, Prox, Reversed);
          Efeito == 4 -> Prox is Vez+2, getCards(Pilha, 4, CartasAdd), remCards(Pilha, 4, PilhaAtt), conc(Deck3, CartasAdd, Deck3Att),
            writeln("Digite a cor da carta:"),writeln("1-Vermelha 2-Verde 3-Azul 4-Amarela"),read(X),
-           (X == 1 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "VERMELHA", " "] , Prox, Reversed);
-            X == 2 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "VERDE", " "], Prox, Reversed);
-            X == 3 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "AZUL", " "], Prox, Reversed);
-            X == 4 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "AMARELA", " "], Prox, Reversed))
+           (X == 1 -> rodar(PilhaAtt, DeckAtt, Deck2, Deck3Att, [30, "VERMELHA", " "] , Prox, Reversed);
+            X == 2 -> rodar(PilhaAtt, DeckAtt, Deck2, Deck3Att, [30, "VERDE", " "], Prox, Reversed);
+            X == 3 -> rodar(PilhaAtt, DeckAtt, Deck2, Deck3Att, [30, "AZUL", " "], Prox, Reversed);
+            X == 4 -> rodar(PilhaAtt, DeckAtt, Deck2, Deck3Att, [30, "AMARELA", " "], Prox, Reversed))
          )
       ) ; % Se não der, pede pra tentar outra...
       Prox is Vez,
