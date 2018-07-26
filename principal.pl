@@ -37,7 +37,7 @@ prepararJogo():-
   [70,"VERMELHA","BLOCK"],[50,"VERMELHA","REVERSE"],[60,"VERMELHA","+2"],[70,"VERMELHA","BLOCK"],[50,"VERMELHA","REVERSE"],[60,"VERMELHA","+2"]],
   conc(Pretas,Amarelas,Result1), conc(Result1,Verdes,Result2), conc(Result2,Azuis,Result3), conc(Result3,Vermelhas,Baralho),
   random_permutation(Baralho,PilhaShuffled),
-  getCards(PilhaShuffled,1,Deck1), remCards(PilhaShuffled,1,Pilha1),
+  getCards(PilhaShuffled,7,Deck1), remCards(PilhaShuffled,7,Pilha1),
   getCards(Pilha1,7,Deck2), remCards(Pilha1,7,Pilha2),
   getCards(Pilha2,7,Deck3), remCards(Pilha2,7,Pilha3),
   getCards(Pilha3,1,Topo), remCards(Pilha3,1,PilhaFinal),
@@ -82,14 +82,26 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
            Efeito == 6 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
            Efeito == 3 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,1);
            Efeito == 2 -> Prox is Vez+1, getCards(Pilha, 2, CartasAdd), remCards(Pilha, 2, PilhaAtt), conc(Deck2,CartasAdd,Deck2Att),
-           rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, Carta, Prox, Reversed)
+            rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, Carta, Prox, Reversed);
+           Efeito == 4 -> Prox is Vez+1, getCards(Pilha, 4, CartasAdd), remCards(Pilha, 4, PilhaAtt), conc(Deck2, CartasAdd, Deck2Att),
+           writeln("Digite a cor da carta:"),writeln("1-Vermelha 2-Verde 3-Azul 4-Amarela"),read(X),
+           (X == 1 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "VERMELHA", " "] , Prox, Reversed);
+            X == 2 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "VERDE", " "], Prox, Reversed);
+            X == 3 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "AZUL", " "], Prox, Reversed);
+            X == 4 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "AMARELA", " "], Prox, Reversed))
            );
 
         (Efeito == 10 -> Prox is Vez+2, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
          Efeito == 6 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,Reversed);
          Efeito == 3 -> Prox is Vez+1, rodar(Pilha,DeckAtt,Deck2,Deck3,Carta,Prox,0);
          Efeito == 2 -> Prox is Vez+2, getCards(Pilha, 2, CartasAdd), remCards(Pilha, 2, PilhaAtt), conc(Deck3,CartasAdd,Deck3Att),
-           rodar(PilhaAtt, DeckAtt, Deck2, Deck3Att, Carta, Prox, Reversed)
+           rodar(PilhaAtt, DeckAtt, Deck2, Deck3Att, Carta, Prox, Reversed);
+         Efeito == 4 -> Prox is Vez+2, getCards(Pilha, 4, CartasAdd), remCards(Pilha, 4, PilhaAtt), conc(Deck3, CartasAdd, Deck3Att),
+           writeln("Digite a cor da carta:"),writeln("1-Vermelha 2-Verde 3-Azul 4-Amarela"),read(X),
+           (X == 1 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "VERMELHA", " "] , Prox, Reversed);
+            X == 2 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "VERDE", " "], Prox, Reversed);
+            X == 3 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "AZUL", " "], Prox, Reversed);
+            X == 4 -> rodar(PilhaAtt, DeckAtt, Deck2Att, Deck3, [30, "AMARELA", " "], Prox, Reversed))
          )
       ) ; % Se não der, pede pra tentar outra...
       Prox is Vez,
@@ -108,18 +120,23 @@ gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
            Efeito == 6 -> Prox is Vez+2, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,Reversed);
            Efeito == 3 -> Prox is Vez+2, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,1);
            Efeito == 2 -> Prox is Vez+1, getCards(PilhaAtt, 2, CartasAdd), remCards(PilhaAtt, 2, PilhaAtt2), conc(Deck2,CartasAdd,Deck2Att),
-           rodar(PilhaAtt2, Deck1, Deck2Att, Deck3, Carta, Prox, Reversed)
+           rodar(PilhaAtt2, Deck1, Deck2Att, Deck3, Carta, Prox, Reversed);
+           Efeito == 4 -> Prox is Vez+1, getCards(PilhaAtt, 4, CartasAdd), remCards(PilhaAtt, 4, PilhaAtt2), conc(Deck2, CartasAdd, Deck2Att),
+            rodar(PilhaAtt2, DeckAtt, Deck2Att, Deck3, Carta, Prox, Reversed)
            );
 
         (Efeito == 10 -> Prox is Vez+2, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,Reversed);
          Efeito == 6 -> Prox is Vez+1, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,Reversed);
          Efeito == 3 -> Prox is Vez+1, rodar(PilhaAtt,Deck1,Deck2,Deck3,Carta,Prox,0);
          Efeito == 2 -> Prox is Vez+2, getCards(PilhaAtt, 2, CartasAdd), remCards(PilhaAtt, 2, PilhaAtt2), conc(Deck3,CartasAdd,Deck3Att),
-           rodar(PilhaAtt2, Deck1, Deck2, Deck3Att, Carta, Prox, Reversed)
+           rodar(PilhaAtt2, Deck1, Deck2, Deck3Att, Carta, Prox, Reversed);
+         Efeito == 4 -> Prox is Vez+2, getCards(PilhaAtt, 4, CartasAdd), remCards(PilhaAtt, 4, PilhaAtt2), conc(Deck3, CartasAdd, Deck3Att),
+           rodar(PilhaAtt2, DeckAtt, Deck2, Deck3Att, Carta, Prox, Reversed)
          )
       );
-      Prox is Vez + 1,
-      conc(Deck1, CartaAdd, DeckAtt), rodar(PilhaAtt, DeckAtt, Deck2, Deck3, Topo, Prox, Reversed)
+      conc(Deck1, CartaAdd, DeckAtt),
+      (Reversed == 0 -> Prox is Vez + 1, rodar(PilhaAtt, DeckAtt, Deck2, Deck3, Topo, Prox, Reversed);
+       Prox is Vez + 2, rodar(PilhaAtt, DeckAtt, Deck2, Deck3, Topo, Prox, Reversed) )
   )
   ).
 
@@ -139,12 +156,16 @@ gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
       (Reversed == 0 ->
           (Efeito == 10 -> Prox is Vez+1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,Reversed);
            Efeito == 6 -> Prox is Vez-1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,Reversed);
-           Efeito == 3 -> Prox is Vez-1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,1)
+           Efeito == 3 -> Prox is Vez-1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,1);
+           Efeito == 2 -> Prox is Vez+1, getCards(Pilha, 2, CartasAdd), remCards(Pilha, 2, PilhaAtt), conc(Deck3, CartasAdd, Deck3Att),
+           rodar(PilhaAtt, Deck1, DeckAtt, Deck3Att, Carta, Prox, Reversed)
            );
 
         (Efeito == 10 -> Prox is Vez-1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,Reversed);
          Efeito == 6 -> Prox is Vez+1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,Reversed);
-         Efeito == 3 -> Prox is Vez+1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,0)
+         Efeito == 3 -> Prox is Vez+1, rodar(Pilha,Deck1,DeckAtt,Deck3,Carta,Prox,0);
+         Efeito == 2 -> Prox is Vez-1, getCards(Pilha, 2, CartasAdd), remCards(Pilha, 2, PilhaAtt), conc(Deck1, CartasAdd, Deck1Att),
+         rodar(PilhaAtt, Deck1Att, DeckAtt, Deck3, Carta, Prox, Reversed)
          )
       ) ; % Se não der, pede pra tentar outra...
       Prox is Vez,
@@ -153,9 +174,9 @@ gerenciaBot1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
     ),
     rodar(Pilha,Deck1,Deck2,Deck3,Carta,Prox,Reversed)
   ; % Se chegou aqui, o player não possui carta válida
-  write("Você não possui carta válida para esta rodada!!")
+  write("Você não possui carta válida para esta rodada!!"), write("Aperte uma tecla para continuar: ")
 
-  ).
+ ).
 
 gerenciaBot2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Vez de DILMÃE\n"), write("Topo: "), showCard(Topo),
@@ -172,12 +193,16 @@ gerenciaBot2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
       (Reversed == 0 ->
           (Efeito == 10 -> Prox is Vez-2, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,Reversed);
            Efeito == 6 -> Prox is Vez-1, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,Reversed);
-           Efeito == 3 -> Prox is Vez-1, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,1)
+           Efeito == 3 -> Prox is Vez-1, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,1);
+           Efeito == 2 -> Prox is Vez-2, getCards(Pilha, 2, CartasAdd), remCards(Pilha, 2, PilhaAtt), conc(Deck1, CartasAdd, Deck1Att),
+           rodar(PilhaAtt, Deck1Att, Deck2, DeckAtt, Carta, Prox, Reversed)
            );
 
         (Efeito == 10 -> Prox is Vez-1, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,Reversed);
          Efeito == 6 -> Prox is Vez-2, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,Reversed);
-         Efeito == 3 -> Prox is Vez-2, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,0)
+         Efeito == 3 -> Prox is Vez-2, rodar(Pilha,Deck1,Deck2,DeckAtt,Carta,Prox,0);
+         Efeito == 2 -> Prox is Vez-1, getCards(Pilha, 2, CartasAdd), remCards(Pilha, 2, PilhaAtt), conc(Deck2, CartasAdd, Deck2Att),
+         rodar(PilhaAtt, Deck1, Deck2Att, DeckAtt, Carta, Prox, Reversed)
          )
       ) ; % Se não der, pede pra tentar outra...
       Prox is Vez,
