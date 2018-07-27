@@ -26,7 +26,7 @@ executarOpcao(Input):-
   ).
 
 prepararJogo():-
-  Pretas = [[30,"PRETA","+4"],[30,"PRETA","+4"],[30,"PRETA","+4"],[30,"PRETA","+4"],[40,"PRETA","newColor"],[40,"PRETA","newColor"],[40,"PRETA","newColor"],[40,"PRETA","newColor"]],
+  Pretas = [[30,"PRETA","+4"],[30,"PRETA","+4"],[30,"PRETA","+4"],[30,"PRETA","+4"]],
   Amarelas = [[0,"AMARELA"," "],[1,"AMARELA"," "],[2,"AMARELA"," "],[3,"AMARELA"," "],[4,"AMARELA"," "],[5,"AMARELA"," "],[6,"AMARELA"," "],[7,"AMARELA"," "],[8,"AMARELA"," "],[9,"AMARELA"," "],[70,"AMARELA","BLOCK"],
   [50,"AMARELA","REVERSE"],[60,"AMARELA","+2"],[70,"AMARELA","BLOCK"],[50,"AMARELA","REVERSE"],[60,"AMARELA","+2"]],
   Verdes = [[0,"VERDE"," "],[1,"VERDE"," "],[2,"VERDE"," "],[3,"VERDE"," "],[4,"VERDE"," "],[5,"VERDE"," "],
@@ -37,24 +37,24 @@ prepararJogo():-
   [70,"VERMELHA","BLOCK"],[50,"VERMELHA","REVERSE"],[60,"VERMELHA","+2"],[70,"VERMELHA","BLOCK"],[50,"VERMELHA","REVERSE"],[60,"VERMELHA","+2"]],
   conc(Pretas,Amarelas,Result1), conc(Result1,Verdes,Result2), conc(Result2,Azuis,Result3), conc(Result3,Vermelhas,Baralho),
   random_permutation(Baralho,PilhaShuffled),
-  getCards(PilhaShuffled,7,Deck1), remCards(PilhaShuffled,7,Pilha1),
-  getCards(Pilha1,7,Deck2), remCards(Pilha1,7,Pilha2),
-  getCards(Pilha2,7,Deck3), remCards(Pilha2,7,Pilha3),
+  getCards(PilhaShuffled,2,Deck1), remCards(PilhaShuffled,2,Pilha1),
+  getCards(Pilha1,2,Deck2), remCards(Pilha1,2,Pilha2),
+  getCards(Pilha2,2,Deck3), remCards(Pilha2,2,Pilha3),
   getCards(Pilha3,1,Topo), remCards(Pilha3,1,PilhaFinal),
   encontraCarta(0,Topo,TopoFinal),
   novoJogo(PilhaFinal,Deck1,Deck2,Deck3,TopoFinal,1,0).
 
 novoJogo(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
-        write("\nIniciando o jogo: Você vs Lula vs Dilma... \n"),
+        write("\nIniciando o jogo: COUTINHO vs LUKINHAS vs TIBERIOZINHO... \n"),
         write("lets do this!!\n"),
         rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed).
 
 rodar(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("--------------------------------------------------------------\n"),
   size(Deck1,Size1), size(Deck2,Size2), size(Deck3,Size3), size(Pilha,SizePilha),
-    (Size1 == 0 -> write("VOCÊ VENCEU, PARABÉNS"),nl;
-   Size2 == 0 -> write("LULA FOI SOLTO, VOCÊ PERDEU!!"),nl;
-   Size3 == 0 -> write("DILMÃE VOLTOU À PRESIDÊNCIA, VOCÊ PERDEU!!"),nl;
+    (Size1 == 0 -> write("COUTINHO VENCEU, PARABÉNS"),nl;
+   Size2 == 0 -> write("LUKINHAS FOI SOLTO, VOCÊ PERDEU!!"),nl;
+   Size3 == 0 -> write("TIBERIOZINHO VOLTOU À PRESIDÊNCIA, VOCÊ PERDEU!!"),nl;
    SizePilha == 0 -> write("O deck foi esgotado! O jogador com menos cartas venceu!")
   ), menu()
   ;
@@ -70,7 +70,7 @@ gerenciaPlayer1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Topo: "), showCard(Topo),
   podeJogar(Deck1,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
-    write("\n  Vez de Coutinho jogar - "), next(Reversed), showDeck(Deck1,0,0,Topo),nl,
+    write("\n  Vez de Coutinho jogar"),nl, showDeck(Deck1,0,0,Topo),nl,
     write("Escolha uma carta "),
     read(Input),
     encontraCarta(Input,Deck1,Carta),
@@ -106,7 +106,7 @@ gerenciaPlayer1(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
       ) ; % Se não der, pede pra tentar outra...
       Prox is Vez,
       write("Tente outra carta"),nl,
-      gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
+      gerenciaPlayer1(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
     ),
     rodar(Pilha,Deck1,Deck2,Deck3,Carta,Prox,Reversed)
   ; % Se chegou aqui, o player não possui carta válida
@@ -144,7 +144,7 @@ gerenciaPlayer2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Topo: "), showCard(Topo),
   podeJogar(Deck2,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
-    write("\n  Vez de Lukinhas Top jogar - "), next(Reversed), showDeck(Deck2,0,0,Topo),nl,
+    write("\n  Vez de Lukinhas Top jogar"),nl, showDeck(Deck2,0,0,Topo),nl,
     write("Escolha uma carta "),
     read(Input),
     encontraCarta(Input,Deck2,Carta),
@@ -180,7 +180,7 @@ gerenciaPlayer2(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
       ) ; % Se não der, pede pra tentar outra...
       Prox is Vez,
       write("Tente outra carta"),nl,
-      gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
+      gerenciaPlayer2(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
     ),
     rodar(Pilha,Deck1,Deck2,Deck3,Carta,Prox,Reversed)
   ; % Se chegou aqui, o player não possui carta válida
@@ -218,7 +218,7 @@ gerenciaPlayer3(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
   write("Topo: "), showCard(Topo),
   podeJogar(Deck3,Topo,Retorno),
   (Retorno == 1 -> % Se tiver carta válida, pede pra o player escolher a carta desejada
-    write("\n Vez de Tiberiozinho jogar - "), next(Reversed), showDeck(Deck3,0,0,Topo),nl,
+    write("\n Vez de Tiberiozinho jogar"),nl, showDeck(Deck3,0,0,Topo),nl,
     write("Escolha uma carta "),
     read(Input),
     encontraCarta(Input,Deck3,Carta),
@@ -254,7 +254,7 @@ gerenciaPlayer3(Pilha,Deck1,Deck2,Deck3,Topo,Vez,Reversed):-
       ) ; % Se não der, pede pra tentar outra...
       Prox is Vez,
       write("Tente outra carta"),nl,
-      gerenciaPlayer(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
+      gerenciaPlayer3(Pilha,Deck1,Deck2,Deck3,Topo,Prox,Reversed)
     ),
     rodar(Pilha,Deck1,Deck2,Deck3,Carta,Prox,Reversed)
   ; % Se chegou aqui, o player não possui carta válida
