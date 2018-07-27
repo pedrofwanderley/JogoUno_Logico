@@ -4,8 +4,8 @@ use_module(deck).
 
 % Mostra ao jogador o próximo bot a jogar
 next(Reversed):-
-  (Reversed == 1 ->  write("Próximo a jogar: Dilmãe\n\n");
-    write("Próximo a jogar: Lula\n\n")
+  (Reversed == 1 ->  write("Próximo a jogar: Tiberiozinho\n\n");
+    write("Próximo a jogar: Lukinhas top\n\n")
     ).
 
 % Mostra ao jogador quantas cartas cada bot tem na mão
